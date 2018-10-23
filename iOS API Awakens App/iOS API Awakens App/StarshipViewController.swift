@@ -44,32 +44,22 @@ class StarshipViewController: UITableViewController, UIPickerViewDelegate, UIPic
         
         let starship = endpointDetails(idType: .starships)
         
-        client.retrieveSWJson(with: starship) { starships, error in
-            guard let starships = starships else {
-                print("starships is empty")
-                return
-            }
+        client.retrieveSWJson(with: starship) { jsonArray, error in
             
             //*********PROBLEM AREA******************
-            guard let starshipInfo = starships.first else {
-                completion(nil, .jsonParsingFailure(message: "Results does not contain starship information"))
+            guard let jsonArray = jsonArray else {
+                print("jsonArray is empty")
                 return
             }
             
-            guard let aStarship = Starships(json: starshipInfo) else {
-                completion(nil, .jsonParsingFailure(message: "Could not parse starship information"))
-                
-            }
+            let starships = jsonArray.flatMap { Starships(json: $0) }
             
-            let starshipInfoResults = starships.flatMap { Starships(json: $0) }
-            
-            if let starshipParsed = aStarship {
-                self.allStarships.append(starshipParsed)
-            }
+            self.allStarships = starships
             
             self.allStarships.sort(by: { $0.sortHeightValue > $1.sortHeightValue })
             
-            
+            self.nameLabel.text = self.allStarships.first?.name
+            self.makeLabel.text = self.allStarships.first?.make
         }
         
     }
@@ -88,7 +78,7 @@ class StarshipViewController: UITableViewController, UIPickerViewDelegate, UIPic
 
 
     @IBAction func englishMeasurementButton(_ sender: Any) {
-        if let currentValue = returnedLength {
+        if let currentValue = sortedLength {
             let result = currentValue * englishUnit
             lengthLabel.text = "\(result)"
         }
@@ -97,7 +87,7 @@ class StarshipViewController: UITableViewController, UIPickerViewDelegate, UIPic
 
 
     @IBAction func metricMeasurementButton(_ sender: Any) {
-        if let currentValue = returnedLength {
+        if let currentValue = sortedLength {
             let result = currentValue / metricUnit
             lengthLabel.text = "\(result)"
         }
@@ -121,7 +111,7 @@ class StarshipViewController: UITableViewController, UIPickerViewDelegate, UIPic
         costLabel.text = allStarships[row].cost
         makeLabel.text = allStarships[row].make
         lengthLabel.text = allStarships[row].length?.description
-        returnedLength = allStarships[row].length
+        sortedLength = allStarships[row].length
         starshipClassLabel.text = allStarships[row].classType
         crewLabel.text = allStarships[row].crew
         

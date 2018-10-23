@@ -21,13 +21,6 @@ enum CostType {
     case Credits
 }
 
-enum endpointID: String {
-    case characters
-    case vehicles
-    case starships
-}
-
-
 protocol SWPersonable {
 
     var name: String? { get set }

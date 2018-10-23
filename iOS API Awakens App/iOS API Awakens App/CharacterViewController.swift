@@ -38,37 +38,24 @@ class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPi
 
         self.title = "Characters"
         
-        let people = endpointDetails(idType: .characters)
-        
-        typealias characters = [String: Any]
-        
-        client.retrieveSWJson(with: people) { characters, error in
-            
-            guard let characters = characters else {
-                print("characters is empty")
-                return
-            }
+        let people = endpointDetails(idType: .people)
+                
+        client.retrieveSWJson(with: people) { jsonArray, error in
             
             //*********PROBLEM AREA******************
-            guard let characterInfo = characters.first else {
-                completion(nil, .jsonParsingFailure(message: "Results does not contain character information"))
+            guard let jsonArray = jsonArray else {
+                print("jsonArray is empty")
                 return
             }
             
-            guard let character = Character(json: characterInfo) else {
-                completion(nil, .jsonParsingFailure(message: "Could not parse character information"))
-                
-            }
-            
-            let characterInfoResults = characters.flatMap { Character(json: $0) }
-            
-            if let characterParsed = character {
-                self.allCharacters.append(characterParsed)
-            }
+            let characters = jsonArray.flatMap { Character(json: $0) }
+        
+            self.allCharacters = characters
             
             self.allCharacters.sort(by: { $0.sortHeightValue > $1.sortHeightValue })
             
-            
+            self.nameLabel.text = self.allCharacters.first?.name
+            self.bornLabel.text = self.allCharacters.first?.born
         } 
         
     }

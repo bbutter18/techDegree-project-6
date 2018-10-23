@@ -39,32 +39,22 @@ class VehicleViewController: UITableViewController, UIPickerViewDelegate, UIPick
         
         let vehicle = endpointDetails(idType: .vehicles)
         
-        client.retrieveSWJson(with: vehicle) { vehicles, error in
-            guard let vehicles = vehicles else {
-                print("vehicles is empty")
+        client.retrieveSWJson(with: vehicle) { jsonArray, error in
+            
+            //*********PROBLEM AREA******************
+            guard let jsonArray = jsonArray else {
+                print("jsonArray is empty")
                 return
             }
             
-            //*******************PROBLEM AREA*************************
-            guard let vehicleInfo = vehicles.first else {
-                completion(nil, .jsonParsingFailure(message: "Results does not contain vehicle information"))
-                return
-            }
+            let vehicles = jsonArray.flatMap { Vehicles(json: $0) }
             
-            guard let vehicle = Vehicles(json: vehicleInfo) else {
-                completion(nil, .jsonParsingFailure(message: "Could not parse vehicle information"))
-                
-            }
-            
-            let vehicleInfoResults = vehicles.flatMap { Vehicles(json: $0) }
-            
-            if let vehicleParsed = vehicle {
-                self.allVehicles.append(vehicleParsed)
-            }
+            self.allVehicles = vehicles
             
             self.allVehicles.sort(by: { $0.sortHeightValue > $1.sortHeightValue })
             
-            
+            self.nameLabel.text = self.allVehicles.first?.name
+            self.makeLabel.text = self.allVehicles.first?.make
         }
         
     }

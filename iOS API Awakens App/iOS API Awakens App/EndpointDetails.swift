@@ -8,6 +8,11 @@
 
 import Foundation
 
+enum endpointID: String {
+    case people
+    case vehicles
+    case starships
+}
 
 struct endpointDetails {
     let idType: endpointID

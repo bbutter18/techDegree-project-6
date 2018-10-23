@@ -18,12 +18,12 @@ class SwapAPIClient {
     
     let downloader = JSONDownloader()
     
-    typealias JSON = [String: Any]
+    typealias JSON = [[String: Any]]
     typealias JSONTaskCompletionHandler = (JSON?, SWAPError?) -> Void
     
     func retrieveSWJson(with endpoint: endpointDetails, completionHandler completion: @escaping JSONTaskCompletionHandler) {
     
-        guard let url = URL(string: endpointDetails.description, relativeTo: baseURL) else {
+        guard let url = URL(string: endpoint.description, relativeTo: baseURL) else {
             completion(nil, .invalidURL)
             return
         }
@@ -39,7 +39,7 @@ class SwapAPIClient {
                 return
             }
             
-                guard let results = json["results"] as? [String: Any] else {
+            guard let results = json["results"] as? [[String: Any]] else {
                     completion(nil, .jsonParsingFailure(message: "JSON data does not contain results"))
                     return
                 }
