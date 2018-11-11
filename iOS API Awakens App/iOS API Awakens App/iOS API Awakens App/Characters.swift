@@ -59,39 +59,39 @@ extension Character: Sortable {
     }
 }
 
-struct HomeWorld: Codable {
-    var name: String?
-    
-    init?(json: [String: Any]) {
-        struct Key {
-            static let name = "name"
-        }
-        
-        guard let planetNameValue = json[Key.name] as? String else {
-            return nil
-        }
-        
-        self.name = planetNameValue
-    }
-    
-}
-
-//Alternative HomeWorld object code
-
 //struct HomeWorld: Codable {
 //    var name: String?
 //
-//    enum CodingKeys: String, CodingKey {
+//    init?(json: [String: Any]) {
+//        struct Key {
+//            static let name = "name"
+//        }
 //
-//        case name = "name"
-//    }
+//        guard let planetNameValue = json[Key.name] as? String else {
+//            return nil
+//        }
 //
-//    init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        self.name = try container.decode(String.self, forKey: .name)
+//        self.name = planetNameValue
 //    }
 //
 //}
+
+//Alternative HomeWorld object code
+
+struct HomeWorld: Codable {
+    var name: String?
+
+    enum CodingKeys: String, CodingKey {
+
+        case name = "name"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+    }
+
+}
 
 
 

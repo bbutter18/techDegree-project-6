@@ -73,13 +73,16 @@ class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPi
         let homeLabelInfo = self.homeworldLabel.text
         
         client.retrieveHomeworldInfo(with: homeLabelInfo!) { json, error in
-
+            let decoder = JSONDecoder()
+            
             guard let json = json else {
                 print("json is empty")
                 return
             }
         
-            let homeWorldInfo = json.flatMap { HomeWorld(json: $0) }
+            let parsedHomeWorld = try? decoder.decode(HomeWorld.self, from: json)
+            
+            self.homeworldLabel.text = parsedHomeWorld?.name
         }
         
     }
@@ -124,6 +127,7 @@ class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPi
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         print("text inside picker view")
+        
         nameLabel.text = allCharacters[row].name
         bornLabel.text = allCharacters[row].born
         heightLabel.text = allCharacters[row].height?.description

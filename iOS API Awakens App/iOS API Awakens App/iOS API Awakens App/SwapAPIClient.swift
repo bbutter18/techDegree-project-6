@@ -51,8 +51,8 @@ class SwapAPIClient {
         
     }
     
-    typealias otherJSON = [[String: Any]]
-    func retrieveHomeworldInfo(with url: String, completionHanlder completion: @escaping (otherJSON?, SWAPError?) -> Void) {
+    //typealias otherJSON = [[String: Any]]
+    func retrieveHomeworldInfo(with url: String, completionHanlder completion: @escaping (Data?, SWAPError?) -> Void) {
         
         guard let url = URL(string: url) else {
             completion(nil, .invalidURL)
@@ -63,22 +63,22 @@ class SwapAPIClient {
         
         print(request)
         
-        let task = downloader.jsonTask(with: request) { json, error in
+        let task = downloader.dataTask(with: request) { json, error in
 
             DispatchQueue.main.async {
 
             guard let json = json else {
                 completion(nil, error)
-                print("noting here asshole")
+                print("initial json is empty")
                 return
             }
                 
-                guard let results = json["name"] as? [[String: Any]] else {
-                    completion(nil, .jsonParsingFailure(message: "JSON data does not contain results"))
-                    return
-                }
+//                guard let results = json as? String else {
+//                    completion(nil, .jsonParsingFailure(message: "JSON data does not contain results"))
+//                    return
+//                }
 
-            completion(results, error)
+            completion(json, error)
             }
         }
         
