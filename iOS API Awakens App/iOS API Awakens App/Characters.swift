@@ -13,7 +13,7 @@ struct Character: Codable, SWPersonable {
     var name: String?
     var born: String?
     var home: String?
-    var height: Double?
+    var height: String?
     var eyes: String?
     var hair: String?
     
@@ -33,34 +33,34 @@ extension Character {
             static let hair = "hair_color"
         }
         //this is type casting the json already, since the json is in a dictionary of strings to any objects
-        guard let nameValue = json[Key.name] as? String,
-            let bornValue = json[Key.born] as? String,
-            let homeValue = json[Key.home] as? String,
-            let heightValue = json[Key.height] as? Double,
-            let eyesValue = json[Key.eyes] as? String,
-            let hairValue = json[Key.hair] as? String else {
-                return nil
-        }
+//        guard let nameValue = json[Key.name] as? String,
+//            let bornValue = json[Key.born] as? String,
+//            let homeValue = json[Key.home] as? String,
+//            let heightValue = json[Key.height] as? String,
+//            let eyesValue = json[Key.eyes] as? String,
+//            let hairValue = json[Key.hair] as? String else {
+//                return nil
+//        }
         
-        self.name = nameValue
-        self.born = bornValue
-        self.home = homeValue
-        self.eyes = eyesValue
-        self.hair = hairValue
-        self.height = heightValue
+        self.name = json[Key.name] as? String
+        self.born = json[Key.born] as? String
+        self.home = json[Key.home] as? String
+        self.eyes = json[Key.eyes] as? String
+        self.hair = json[Key.hair] as? String
+        self.height = json[Key.height] as? String
         
-        guard let heightValueUnwrapped = height else {
-            return nil
-        }
+//        guard let heightValueUnwrapped = height else {
+//            return nil
+//        }
         
-        self.height = Double(heightValueUnwrapped)
+//        self.height = Double(heightValueUnwrapped)
         
     }
 }
 
 extension Character: Sortable {
     var sortHeightValue: Double {
-        return self.height!
+        return Double(self.height!) ?? 0.0
     }
 }
 

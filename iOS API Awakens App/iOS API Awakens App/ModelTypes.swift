@@ -26,7 +26,7 @@ protocol SWPersonable {
     var name: String? { get set }
     var born: String? { get set }
     var home: String? { get set }
-    var height: Double? { get set }
+    var height: String? { get set }
     var eyes: String? { get set }
     var hair: String? { get set }
     

@@ -52,17 +52,14 @@ class SwapAPIClient {
     }
     
     
-    func retrieveHomeworldInfo(with url: String, completionHanlder completion: @escaping JSONTaskCompletionHandler) {
+    func retrieveHomeworldInfo(with url: String, completionHanlder completion: @escaping ([String: Any]) -> Void) {
         let request = URLRequest(url: URL(string: url)!)
         
-        let task = downloader.jsonTask(with: request) { data, error in
+        let task = downloader.jsonTask(with: request) { json, error in
         
-            guard let data = data else {
-                completion(nil, error)
-                return
-            }
+            guard let json = json else { return }
             
-            completion(nil, error)
+            completion(json)
         }
         
         task.resume()

@@ -11,7 +11,11 @@ import UIKit
 class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
     let client = SwapAPIClient()
-    var allCharacters: [Character] = []
+    var allCharacters = [Character]() {
+        didSet {
+            characterPickerView.reloadAllComponents()
+        }
+    }
     let englishUnit = 0.39
     let metricUnit = 100.0
     var sortedHeight: Double? = nil
@@ -30,11 +34,11 @@ class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPi
     @IBOutlet weak var smallestLabel: UILabel!
     @IBOutlet weak var largestLabel: UILabel!
     
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        characterPickerView.delegate = self
+        characterPickerView.dataSource = self
 
         self.title = "Characters"
         
@@ -48,16 +52,22 @@ class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPi
                 return
             }
             
-            let characters = jsonArray.flatMap { Character(json: $0) }
-        
-            self.allCharacters = characters
+            self.allCharacters = jsonArray.compactMap { Character(json: $0) }
+            
+            for character in self.allCharacters {
+                if let url = character.home {
+                    self.client.retrieveHomeworldInfo(with: url) { (json) in
+                        let planet = Planet(json: json)
+                        print(planet)
+                    }
+                }
+            }
             
             self.allCharacters.sort(by: { $0.sortHeightValue > $1.sortHeightValue })
             
             self.nameLabel.text = self.allCharacters.first?.name
             self.bornLabel.text = self.allCharacters.first?.born
-        } 
-        
+        }
     }
 
     //***********************END PROBLEM AREA***********************
@@ -96,7 +106,7 @@ class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPi
         nameLabel.text = allCharacters[row].name
         bornLabel.text = allCharacters[row].born
         heightLabel.text = allCharacters[row].height?.description
-        sortedHeight = allCharacters[row].height
+//        sortedHeight = allCharacters[row].height
         eyesLabel.text = allCharacters[row].eyes
         hairLabel.text = allCharacters[row].hair
         
