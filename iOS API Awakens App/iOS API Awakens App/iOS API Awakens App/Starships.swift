@@ -28,7 +28,7 @@ extension Starships {
             static let make = "manufacturer"
             static let cost = "cost_in_credits"
             static let length = "length"
-            static let classType = "vehicle_class"
+            static let classType = "starship_class"
             static let crew = "crew"
         }
         
@@ -36,7 +36,7 @@ extension Starships {
             let makeValue = json[Key.make] as? String,
             let costValue = json[Key.cost] as? String,
             let lengthValue = json[Key.length] as? String,
-            let vehicleClassValue = json[Key.classType] as? String,
+            let starshipClassValue = json[Key.classType] as? String,
             let crewValue = json[Key.crew] as? String else {
                 return nil
         }
@@ -45,21 +45,15 @@ extension Starships {
         self.make = makeValue
         self.cost = costValue
         self.length = lengthValue
-        self.classType = vehicleClassValue
+        self.classType = starshipClassValue
         self.crew = crewValue
-        
-        guard let lengthValueUnwrapped = length else {
-            return nil
-        }
-        
-        //self.length = Double(lengthValueUnwrapped)
         
     }
 }
 
-extension Starships: Sortable {
-    var sortHeightValue: String {
-        return self.length!
+extension Starships: TransportSortable {
+    var sortLengthValue: Double {
+        return Double(self.length!) ?? 0.0
     }
 }
 

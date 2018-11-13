@@ -11,10 +11,15 @@ import UIKit
 class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
     let client = SwapAPIClient()
-    var allCharacters: [Character] = []
-    let englishUnit = 0.39
-    let metricUnit = 100.0
-    var sortedHeight: String? = nil
+    var allCharacters = [Character]() {
+        didSet {
+            characterPickerView.reloadAllComponents()
+        }
+    }
+    
+    let englishUnit = 0.39 //conversion of centimeters to inches
+    let metricUnit = 100.0 //conversion of centimeters to meters
+    var sortedHeight: Double? = nil
     
     
     @IBOutlet weak var nameLabel: UILabel!
@@ -30,6 +35,8 @@ class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPi
     @IBOutlet weak var smallestLabel: UILabel!
     @IBOutlet weak var largestLabel: UILabel!
     
+    @IBOutlet weak var englishButton: UIButton!
+    @IBOutlet weak var metricButton: UIButton!
     
     
     
@@ -37,6 +44,9 @@ class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPi
         super.viewDidLoad()
 
         self.title = "Characters"
+        
+        characterPickerView.dataSource = self
+        characterPickerView.delegate = self
         
         let people = endpointDetails(idType: .people)
                 
@@ -47,12 +57,22 @@ class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPi
                 return
             }
             
-            let characters = jsonArray.flatMap { Character(json: $0) }
-        
-            self.allCharacters = characters
+            self.allCharacters = jsonArray.compactMap { Character(json: $0) }
+            print(self.allCharacters.count)
             
-            print(characters.count)
-            
+            for character in self.allCharacters {
+
+                if let url = character.home {
+                    self.client.retrieveHomeworldInfo(with: url) { (json) in
+
+                        let planet = HomeWorld(json: json)
+                        print(planet)
+                        DispatchQueue.main.async {
+                        self.homeworldLabel.text = planet.name
+                    }
+                }
+                }
+            }
             self.allCharacters.sort(by: { $0.sortHeightValue > $1.sortHeightValue })
             
             self.nameLabel.text = self.allCharacters.first?.name
@@ -63,53 +83,31 @@ class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPi
             self.homeworldLabel.text = self.allCharacters.first?.home
             print(self.homeworldLabel.text!)
             
-            self.smallestLabel.text = self.allCharacters.first?.name
-            self.largestLabel.text = self.allCharacters.last?.name
+            self.smallestLabel.text = self.allCharacters.last?.name
+            self.largestLabel.text = self.allCharacters.first?.name
             
         }
-        
-        
-        //***********************Problem Area***********************
-        let homeLabelInfo = self.homeworldLabel.text
-        
-        client.retrieveHomeworldInfo(with: homeLabelInfo!) { json, error in
-            let decoder = JSONDecoder()
-            
-            guard let json = json else {
-                print("json is empty")
-                return
-            }
-        
-            let parsedHomeWorld = try? decoder.decode(HomeWorld.self, from: json)
-            
-            self.homeworldLabel.text = parsedHomeWorld?.name
-        }
-        
     }
-
-    //***********************END PROBLEM AREA***********************
     
     
     @IBAction func englishMeasurementButton(_ sender: Any) {
-        self.heightLabel.text = self.allCharacters.first?.height
         
-        let convertedHeight = Double(heightLabel.text!)
+        let convertedHeight = sortedHeight
         
         if let currentValue = convertedHeight {
             let result = currentValue * englishUnit
-            heightLabel.text = "\(result) inches"
+            heightLabel.text = "\(result)in"
         }
     }
     
     
     @IBAction func metricMeasurementButton(_ sender: Any) {
-        self.heightLabel.text = self.allCharacters.first?.height
         
-        let convertedHeight = Double(heightLabel.text!)
+        let convertedHeight = sortedHeight
         
         if let currentValue = convertedHeight {
             let result = currentValue / metricUnit
-            heightLabel.text = "\(result) meters"
+            heightLabel.text = "\(result)m"
         }
     }
     
@@ -129,12 +127,23 @@ class CharacterViewController: UITableViewController, UIPickerViewDelegate, UIPi
         print("text inside picker view")
         
         nameLabel.text = allCharacters[row].name
+        homeworldLabel.text = allCharacters[row].home
+
+        client.retrieveHomeworldInfo(with: (self.homeworldLabel.text)!) { (json) in
+            
+            let planet = HomeWorld(json: json)
+            print(planet)
+            DispatchQueue.main.async {
+                self.homeworldLabel.text = planet.name
+            }
+        }
+        
         bornLabel.text = allCharacters[row].born
-        heightLabel.text = allCharacters[row].height?.description
-        sortedHeight = allCharacters[row].height
+        heightLabel.text = allCharacters[row].height
+        sortedHeight = allCharacters[row].sortHeightValue
         eyesLabel.text = allCharacters[row].eyes
         hairLabel.text = allCharacters[row].hair
-        
+
         smallestLabel.text = allCharacters.last?.name
         largestLabel.text = allCharacters.first?.name
         

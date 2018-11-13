@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-
+//WHY IS THIS HERE?
 enum MeasurementType {
     case English
     case Metric
@@ -43,10 +43,14 @@ protocol SWTransportable {
 }
 
 
-protocol Sortable {
+protocol CharacterSortable {
     associatedtype SortableType: Comparable
     var sortHeightValue: SortableType { get }
 }
 
-
+protocol TransportSortable {
+    associatedtype SortableType: Comparable
+    var sortLengthValue: SortableType { get }
+    
+}
 

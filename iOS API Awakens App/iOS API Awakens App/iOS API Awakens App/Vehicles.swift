@@ -47,18 +47,13 @@ extension Vehicles {
         self.classType = vehicleClassValue
         self.crew = crewValue
         
-        guard let lengthValueUnwrapped = length else {
-            return nil
-        }
-        
-        //self.length = Double(lengthValueUnwrapped)
     }
 }
 
 
-extension Vehicles: Sortable {
-    var sortHeightValue: String {
-        return self.length!
+extension Vehicles: TransportSortable {
+    var sortLengthValue: Double {
+        return Double(self.length!) ?? 0.0
     }
 }
 

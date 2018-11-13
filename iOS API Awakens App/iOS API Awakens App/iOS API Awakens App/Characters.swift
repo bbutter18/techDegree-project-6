@@ -53,45 +53,21 @@ extension Character {
     }
 }
 
-extension Character: Sortable {
-    var sortHeightValue: String {
-        return self.height!
+extension Character: CharacterSortable {
+    var sortHeightValue: Double {
+        return Double(self.height!) ?? 0.0
     }
 }
 
-//struct HomeWorld: Codable {
-//    var name: String?
-//
-//    init?(json: [String: Any]) {
-//        struct Key {
-//            static let name = "name"
-//        }
-//
-//        guard let planetNameValue = json[Key.name] as? String else {
-//            return nil
-//        }
-//
-//        self.name = planetNameValue
-//    }
-//
-//}
+struct HomeWorld {
+    let name: String?
 
-//Alternative HomeWorld object code
+    init(json: [String: Any]) {
+        self.name = json["name"] as? String
 
-struct HomeWorld: Codable {
-    var name: String?
-
-    enum CodingKeys: String, CodingKey {
-
-        case name = "name"
     }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.decode(String.self, forKey: .name)
-    }
-
 }
+
 
 
 

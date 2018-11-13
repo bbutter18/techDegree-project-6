@@ -74,57 +74,6 @@ class JSONDownloader {
     }
 
 
-    func dataTask(with request: URLRequest, completionHandler completion: @escaping (Data?, SWAPError?) -> Void) -> URLSessionDataTask {
-        
-        let task = session.dataTask(with: request) { data, response, error in
-            
-            if let urlError = error as? URLError {
-                switch urlError.code {
-                case .notConnectedToInternet:
-                    self.displayAlertError(with: "Error", message: "No Internet Connection Available")
-                    
-                case .networkConnectionLost:
-                    self.displayAlertError(with: "Error", message: "Network Connection Lost")
-                    
-                default: break
-                }
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                completion(nil, .requestFailed)
-                return
-            }
-            
-            if httpResponse.statusCode == 200 {
-                if let data = data {
-                    completion(data, nil)
-                } else {
-                    completion(nil, .invalidData)
-                }
-            } else {
-                completion(nil, .responseUnsuccessful)
-            }
-            
-        }
-        
-        return task
-        
-    }
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
 
 }
 
