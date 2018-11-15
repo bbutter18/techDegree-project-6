@@ -9,18 +9,6 @@
 import Foundation
 import UIKit
 
-
-//WHY IS THIS HERE?
-enum MeasurementType {
-    case English
-    case Metric
-}
-
-enum CostType {
-    case USD
-    case Credits
-}
-
 protocol SWPersonable {
 
     var name: String? { get set }

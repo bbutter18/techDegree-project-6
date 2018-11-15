@@ -20,7 +20,6 @@
 		5F8012522177B8DC00CDF243 /* Characters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8012512177B8DC00CDF243 /* Characters.swift */; };
 		5F8012542177B8E400CDF243 /* Vehicles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8012532177B8E400CDF243 /* Vehicles.swift */; };
 		5F8012562177B8EE00CDF243 /* Starships.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8012552177B8EE00CDF243 /* Starships.swift */; };
-		5F8012582177B97A00CDF243 /* SwapAPIAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8012572177B97A00CDF243 /* SwapAPIAttribute.swift */; };
 		5F80125A2177B9DF00CDF243 /* QueryItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8012592177B9DF00CDF243 /* QueryItemProvider.swift */; };
 		5F8012642177E51300CDF243 /* CharacterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8012632177E51300CDF243 /* CharacterViewController.swift */; };
 		5F8012662177E53100CDF243 /* VehicleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8012652177E53100CDF243 /* VehicleViewController.swift */; };
@@ -43,7 +42,6 @@
 		5F8012512177B8DC00CDF243 /* Characters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Characters.swift; sourceTree = "<group>"; };
 		5F8012532177B8E400CDF243 /* Vehicles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vehicles.swift; sourceTree = "<group>"; };
 		5F8012552177B8EE00CDF243 /* Starships.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Starships.swift; sourceTree = "<group>"; };
-		5F8012572177B97A00CDF243 /* SwapAPIAttribute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwapAPIAttribute.swift; sourceTree = "<group>"; };
 		5F8012592177B9DF00CDF243 /* QueryItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryItemProvider.swift; sourceTree = "<group>"; };
 		5F8012632177E51300CDF243 /* CharacterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterViewController.swift; sourceTree = "<group>"; };
 		5F8012652177E53100CDF243 /* VehicleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VehicleViewController.swift; sourceTree = "<group>"; };
@@ -117,7 +115,6 @@
 		5F80125B2177BB4000CDF243 /* Endpoint */ = {
 			isa = PBXGroup;
 			children = (
-				5F8012572177B97A00CDF243 /* SwapAPIAttribute.swift */,
 				5F8012592177B9DF00CDF243 /* QueryItemProvider.swift */,
 				5F80124F2177B20E00CDF243 /* ModelTypes.swift */,
 			);
@@ -209,7 +206,6 @@
 			files = (
 				5F8012502177B20E00CDF243 /* ModelTypes.swift in Sources */,
 				5F8012662177E53100CDF243 /* VehicleViewController.swift in Sources */,
-				5F8012582177B97A00CDF243 /* SwapAPIAttribute.swift in Sources */,
 				5F80124721778A4C00CDF243 /* JSONDownloader.swift in Sources */,
 				5F8012642177E51300CDF243 /* CharacterViewController.swift in Sources */,
 				5F8011FD216FF90500CDF243 /* ViewController.swift in Sources */,
